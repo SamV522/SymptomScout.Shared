@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
 
-namespace SymptomScout.Shared.Models
+namespace SymptomScout.Shared.Domain
 {
+    [Index(nameof(Name), IsUnique = true, Name = "UC_Diagnosis__Name")]
     public class Diagnosis
     {
         [Key]
@@ -11,7 +14,6 @@ namespace SymptomScout.Shared.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [InverseProperty("Diagnosis")]
         public ICollection<Symptom> Symptoms { get; set; }
     }
 }
