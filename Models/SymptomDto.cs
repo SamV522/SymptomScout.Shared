@@ -1,5 +1,6 @@
 ﻿using SymptomScout.Shared.Domain;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SymptomScout.Shared.Models
 {
@@ -8,16 +9,30 @@ namespace SymptomScout.Shared.Models
         public int SymptomId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public IList<Diagnosis>? Diagnoses { get; set; }
+        public ICollection<DiagnosisDto>? Diagnoses { get; set; }
 
         public SymptomDto() { }
 
-        public SymptomDto(int id, string name, string description, IList<Diagnosis> diagnoses) 
+        public SymptomDto(Symptom symptom) 
         {
-            SymptomId = id;
-            Name = name;
-            Description = description;
-            Diagnoses = diagnoses;
+            SymptomId = symptom.SymptomId;
+            Name = symptom.Name;
+            Description = symptom.Description;
+        }
+
+        public SymptomDto(Symptom symptom, ICollection<Diagnosis> diagnoses) : this(symptom)
+        {
+            Diagnoses = diagnoses.Select(d => (DiagnosisDto) d).ToList();
+        }
+
+        public static implicit operator SymptomDto(Symptom symptom)
+        {
+            return new SymptomDto
+            {
+                SymptomId = symptom.SymptomId,
+                Name = symptom.Name,
+                Description = symptom.Description
+            };
         }
     }
 }
